@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Code Resume</title>
+		<!--<link type="text/css" href="styles.css" media="screen" rel="Stylesheet" />-->
+		<script type="text/javascript" src="jquery-2.1.1.min.js"></script>
+	</head>
+
+	<body>
+		<div id="header">
+			<h1>Code Resume</h1>
+		</div>
+
+		<div id="navigation">
+			<ul>
+				<li><a href="#home" id="home_link" class="selected">Home</a></li>
+			</ul>
+		</div>
+
+		<div class="content" id="home">
+			<div>
+				<p>
+					A pure JS client side website for showing your code
+					resume. Like Ohloh, but not terrible. And free open 
+					source software.
+				</p>
+			</div>
+		</div>
+
+		<div class="content" id="github">
+			Github Repos
+			<div id="github_repos">
+			</div>
+		</div>
+
+		<div id="footer">This website is available under the MIT license at 
+			<a href="https://github.com/workhorsy/code_resume" target="_blank">https://github.com/workhorsy/code_resume</a>
+			<br />
+			Copyright &copy; 2014 <a href="http://workhorsy.org" target="_blank">Matthew Brennan Jones</a>
+		</div>
+
+		<script type="text/javascript" language="JavaScript">			
+			$(function() {
+				// Github API V3
+				// https://developer.github.com/v3/
+				var BASE_URL = "https://api.github.com/";
+				var user_name = "workhorsy";
+				
+				var url = BASE_URL + "users/" + user_name + "/repos";
+				
+				$.getJSON(url, function(data) {
+					$.each(data, function(n, repo) {
+						var items = [repo["name"] + "<br />"];
+
+						$.each(repo, function(key, value) {
+							items.push("&nbsp;&nbsp;&nbsp;&nbsp;key: " + key + ", value:" + value + "<br />");
+						});
+
+						$("#github_repos").append(items.join(""));
+					});
+				});
+			});
+		</script>
+	</body>
+</html>
