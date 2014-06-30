@@ -47,18 +47,35 @@
 				// https://developer.github.com/v3/
 				var BASE_URL = "https://api.github.com/";
 				var user_name = "workhorsy";
+				var user_emails = [
+					"matthew.brennan.jones@gmail.com", 
+					"mattjones@workhorsy.org"
+				];
 				
 				var url = BASE_URL + "users/" + user_name + "/repos";
 				
+				// Each repository
 				$.getJSON(url, function(data) {
 					$.each(data, function(n, repo) {
-						var items = [repo["name"] + "<br />"];
+						var url = BASE_URL + "repos/" + user_name + "/" + repo["name"] + "/stats/contributors";
+						
+						// Each contributor
+						$.getJSON(url, function(data) {
+							var my_commits = 0;
+							var all_commits = 0;
+							$.each(data, function(n, contributors) {
+								var author = contributors["author"]["login"];
+								var commits = contributors["total"];
 
-						$.each(repo, function(key, value) {
-							items.push("&nbsp;&nbsp;&nbsp;&nbsp;key: " + key + ", value:" + value + "<br />");
+								if(author == user_name) {
+									my_commits = commits;
+								}
+								all_commits += commits;
+							});
+
+							var message = repo["name"] + " commits: " + my_commits + " of " + all_commits + "<br />";
+							$("#github_repos").append(message);
 						});
-
-						$("#github_repos").append(items.join(""));
 					});
 				});
 			});
